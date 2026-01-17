@@ -56,39 +56,77 @@ const FeedbackForm = () => {
       title: 'Text Size Settings Available',
       subtitle: 'You can customize font size to your preference',
       options: [
-        { title: 'Adjust Text Size', steps: ['Open Settings from the menu', 'Navigate to Display Settings', 'Use the Text Size slider to adjust', 'Changes apply instantly'] },
-        { title: 'Reading Mode', steps: ['Tap any article to open', 'Look for the "Aa" icon at the top', 'Choose from preset sizes', 'Enable Reader Mode for cleaner layout'] }
+        { 
+          header: 'Adjust Text Size', 
+          subhead: 'Customize your reading experience',
+          type: 'free',
+          steps: ['Open Settings from the menu', 'Navigate to Display Settings', 'Use the Text Size slider to adjust', 'Changes apply instantly'] 
+        },
+        { 
+          header: 'Old Mode', 
+          subhead: 'Bigger text, simpler layout, easier reading.',
+          type: 'paid',
+          price: 9,
+          steps: ['Go to Settings', 'Select Display Options', 'Enable Old Mode', 'Enjoy the classic reading interface'] 
+        }
       ]
     },
     'Dark Mode / Brightness': {
       icon: '🌙',
       title: 'Theme Customization',
       subtitle: 'Switch between Light, Dark, or Auto themes',
-      options: [{ title: 'Change Theme', steps: ['Go to Settings', 'Select Display Settings', 'Choose Light, Dark, or System', 'Theme changes immediately'] }]
+      options: [{ 
+        header: 'Change Theme', 
+        subhead: 'Personalize your app appearance',
+        type: 'free',
+        steps: ['Go to Settings', 'Select Display Settings', 'Choose Light, Dark, or System', 'Theme changes immediately'] 
+      }]
     },
     'Notifications Issues': {
       icon: '🔔',
       title: 'Notification Controls',
       subtitle: 'Manage frequency and types of alerts',
-      options: [{ title: 'Adjust Notifications', steps: ['Open Settings', 'Tap Notification Preferences', 'Toggle Breaking News, Daily Digest, etc.', 'Set quiet hours if needed'] }]
+      options: [{ 
+        header: 'Adjust Notifications', 
+        subhead: 'Control your alerts',
+        type: 'paid',
+        price: 29,
+        steps: ['Open Settings', 'Tap Notification Preferences', 'Toggle Breaking News, Daily Digest, etc.', 'Set quiet hours if needed'] 
+      }]
     },
     'Images Not Loading': {
       icon: '🖼️',
       title: 'Image Loading Settings',
       subtitle: 'Optimize for your network connection',
-      options: [{ title: 'Data Saver Mode', steps: ['Go to Settings', 'Enable Data Saver', 'Images load in lower quality', 'Faster loading on slow networks'] }]
+      options: [{ 
+        header: 'Data Saver Mode', 
+        subhead: 'Save data while browsing',
+        type: 'free',
+        steps: ['Go to Settings', 'Enable Data Saver', 'Images load in lower quality', 'Faster loading on slow networks'] 
+      }]
     },
     'App Crashing / Freezing': {
       icon: '⚡',
       title: 'Quick Fixes',
       subtitle: 'Common solutions for stability issues',
-      options: [{ title: 'Update App', steps: ['Open your app store', 'Search for the app', 'Tap Update if available', 'Restart after updating'] }]
+      options: [{ 
+        header: 'Update App', 
+        subhead: 'Get the latest version',
+        type: 'free',
+        steps: ['Open your app store', 'Search for the app', 'Tap Update if available', 'Restart after updating'] 
+      }]
     },
     'Login / Sync Issues': {
       icon: '🔄',
       title: 'Sync Your Content',
       subtitle: 'Refresh and re-sync your data',
-      options: [{ title: 'Force Refresh', steps: ['Go to your home screen', 'Pull down to refresh', 'Wait for sync to complete', 'Check if issue persists'] }]
+      options: [{ 
+        header: 'Force Refresh', 
+        subhead: 'Resync your data',
+        type: 'paid',
+        price: 49,
+        steps: ['Go to your home screen', 'Pull down to refresh', 'Wait for sync to complete', 'Check if issue persists'] 
+      }]
     }
   };
 
@@ -294,17 +332,70 @@ const FeedbackForm = () => {
                 {isHelpExpanded && (
                   <div style={{ padding: '14px 16px', borderTop: '1px solid #f5f5f5' }}>
                     <p style={{ fontSize: '11px', color: '#a3a3a3', margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Quick solutions</p>
-                    <div style={{ display: 'flex', gap: '8px', overflowX: 'auto' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
                       {solutions[selectedSubtype].options.map((option, idx) => (
                         <button
                           key={idx}
                           onClick={() => openSolution(option)}
                           style={{
-                            flexShrink: 0, padding: '10px 14px', background: '#f5f5f5', border: 'none',
-                            borderRadius: '6px', fontSize: '13px', fontWeight: 500, color: '#525252', cursor: 'pointer'
+                            position: 'relative',
+                            width: '100%',
+                            aspectRatio: '1',
+                            padding: '12px',
+                            background: '#fafafa',
+                            border: '1px solid #e5e5e5',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            justifyContent: 'space-between',
+                            textAlign: 'left',
+                            transition: 'all 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = '#f5f5f5';
+                            e.currentTarget.style.borderColor = '#d4d4d4';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = '#fafafa';
+                            e.currentTarget.style.borderColor = '#e5e5e5';
                           }}
                         >
-                          {option.title}
+                          <div style={{ flex: 1, width: '100%' }}>
+                            <h4 style={{ fontSize: '13px', fontWeight: 600, color: '#171717', margin: '0 0 4px', lineHeight: '1.3' }}>
+                              {option.header || option.title}
+                            </h4>
+                            <p style={{ fontSize: '11px', color: '#737373', margin: 0, lineHeight: '1.4' }}>
+                              {option.subhead || ''}
+                            </p>
+                          </div>
+                          <div style={{ 
+                            width: '100%', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'space-between',
+                            marginTop: '8px'
+                          }}>
+                            {option.type === 'paid' && (
+                              <span style={{ fontSize: '12px', fontWeight: 600, color: '#171717' }}>
+                                ₹{option.price}
+                              </span>
+                            )}
+                            {option.type === 'free' && (
+                              <span style={{ width: '1px' }}></span>
+                            )}
+                            <span style={{
+                              fontSize: '11px',
+                              fontWeight: 500,
+                              color: '#fff',
+                              background: option.type === 'free' ? '#171717' : '#171717',
+                              padding: '4px 10px',
+                              borderRadius: '12px'
+                            }}>
+                              {option.type === 'free' ? 'Claim' : 'Unlock'}
+                            </span>
+                          </div>
                         </button>
                       ))}
                     </div>
@@ -375,7 +466,7 @@ const FeedbackForm = () => {
             <div style={{ padding: '12px 20px 16px', borderBottom: '1px solid #f5f5f5' }}>
               <div style={{ width: '36px', height: '4px', background: '#e5e5e5', borderRadius: '2px', margin: '0 auto 14px' }} />
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#171717', margin: 0 }}>{selectedSolution.title}</h2>
+                <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#171717', margin: 0 }}>{selectedSolution.header || selectedSolution.title}</h2>
                 <button onClick={() => setShowBottomSheet(false)} style={{ padding: '6px', background: 'transparent', border: 'none', cursor: 'pointer' }}>
                   <X style={{ width: '20px', height: '20px', color: '#737373' }} />
                 </button>
