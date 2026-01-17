@@ -58,18 +58,17 @@ const FeedbackForm = () => {
       title: 'Text Size Settings Available',
       subtitle: 'You can customize font size to your preference',
       options: [
-        { 
-          header: 'Adjust Text Size', 
+        {
+          header: 'Adjust Text Size',
           subhead: 'Customize your reading experience',
           type: 'free',
-          steps: ['Open Settings from the menu', 'Navigate to Display Settings', 'Use the Text Size slider to adjust', 'Changes apply instantly'] 
+          steps: ['Open Settings from the menu', 'Navigate to Display Settings', 'Use the Text Size slider to adjust', 'Changes apply instantly']
         },
-        { 
+        {
           header: 'Senior Citizens Mode',
           subhead: 'Bigger text, simpler layout, easier reading.',
-          type: 'paid',
-          price: 9,
-          steps: ['Go to Settings', 'Select Display Options', 'Enable Senior Citizens Mode', 'Enjoy the classic reading interface'] 
+          type: 'free',
+          steps: ['Go to Settings', 'Select Display Options', 'Enable Senior Citizens Mode', 'Enjoy the classic reading interface']
         }
       ]
     },
@@ -77,58 +76,108 @@ const FeedbackForm = () => {
       icon: Moon,
       title: 'Theme Customization',
       subtitle: 'Switch between Light, Dark, or Auto themes',
-      options: [{ 
-        header: 'Change Theme', 
+      options: [{
+        header: 'Change Theme',
         subhead: 'Personalize your app appearance',
         type: 'free',
-        steps: ['Go to Settings', 'Select Display Settings', 'Choose Light, Dark, or System', 'Theme changes immediately'] 
+        steps: ['Go to Settings', 'Select Display Settings', 'Choose Light, Dark, or System', 'Theme changes immediately']
       }]
     },
     'Notifications Issues': {
       icon: Bell,
       title: 'Notification Controls',
       subtitle: 'Manage frequency and types of alerts',
-      options: [{ 
-        header: 'Adjust Notifications', 
+      options: [{
+        header: 'Adjust Notifications',
         subhead: 'Control your alerts',
-        type: 'paid',
-        price: 29,
-        steps: ['Open Settings', 'Tap Notification Preferences', 'Toggle Breaking News, Daily Digest, etc.', 'Set quiet hours if needed'] 
+        type: 'free',
+        steps: ['Open Settings', 'Tap Notification Preferences', 'Toggle Breaking News, Daily Digest, etc.', 'Set quiet hours if needed']
       }]
     },
     'Images Not Loading': {
       icon: ImageIcon,
       title: 'Image Loading Settings',
       subtitle: 'Optimize for your network connection',
-      options: [{ 
-        header: 'Data Saver Mode', 
+      options: [{
+        header: 'Data Saver Mode',
         subhead: 'Save data while browsing',
         type: 'free',
-        steps: ['Go to Settings', 'Enable Data Saver', 'Images load in lower quality', 'Faster loading on slow networks'] 
+        steps: ['Go to Settings', 'Enable Data Saver', 'Images load in lower quality', 'Faster loading on slow networks']
       }]
     },
     'App Crashing / Freezing': {
       icon: Zap,
       title: 'Quick Fixes',
       subtitle: 'Common solutions for stability issues',
-      options: [{ 
-        header: 'Update App', 
+      options: [{
+        header: 'Update App',
         subhead: 'Get the latest version',
         type: 'free',
-        steps: ['Open your app store', 'Search for the app', 'Tap Update if available', 'Restart after updating'] 
+        steps: ['Open your app store', 'Search for the app', 'Tap Update if available', 'Restart after updating']
       }]
     },
     'Login / Sync Issues': {
       icon: RefreshCw,
       title: 'Sync Your Content',
       subtitle: 'Refresh and re-sync your data',
-      options: [{ 
-        header: 'Force Refresh', 
+      options: [{
+        header: 'Force Refresh',
         subhead: 'Resync your data',
-        type: 'paid',
-        price: 49,
-        steps: ['Go to your home screen', 'Pull down to refresh', 'Wait for sync to complete', 'Check if issue persists'] 
+        type: 'free',
+        steps: ['Go to your home screen', 'Pull down to refresh', 'Wait for sync to complete', 'Check if issue persists']
       }]
+    },
+    'Too Many Ads': {
+      icon: Zap,
+      title: 'Ad-Free Reading Options',
+      subtitle: 'Enjoy uninterrupted reading experience',
+      options: [
+        {
+          header: 'TOI+',
+          subhead: 'Premium ad-free experience',
+          type: 'free',
+          steps: ['Subscribe to TOI+', 'Access exclusive content', 'Enjoy ad-free reading', 'Support quality journalism']
+        },
+        {
+          header: 'ET Prime',
+          subhead: 'Ad-free business news',
+          type: 'free',
+          steps: ['Subscribe to ET Prime', 'Get premium business insights', 'Read without interruptions', 'Access exclusive analysis']
+        },
+        {
+          header: 'Weekend Pass',
+          subhead: 'Ad-free weekends',
+          type: 'paid',
+          price: 9,
+          steps: ['Purchase Weekend Pass', 'Valid for Saturday & Sunday', 'Enjoy ad-free browsing', 'Auto-expires Monday']
+        }
+      ]
+    },
+    'Irrelevant to Me': {
+      icon: Type,
+      title: 'Get Quality Articles',
+      subtitle: 'Personalize your news feed for better content',
+      options: [
+        {
+          header: 'TOI+',
+          subhead: 'Curated quality articles',
+          type: 'free',
+          steps: ['Subscribe to TOI+', 'Access handpicked stories', 'Get in-depth journalism', 'Quality over quantity']
+        },
+        {
+          header: 'ET Prime',
+          subhead: 'Premium quality content',
+          type: 'free',
+          steps: ['Subscribe to ET Prime', 'Expert-curated articles', 'Deep-dive analysis', 'Quality business journalism']
+        },
+        {
+          header: 'Weekend Pass',
+          subhead: 'Quality reads for weekends',
+          type: 'paid',
+          price: 9,
+          steps: ['Purchase Weekend Pass', 'Access premium articles', 'Curated weekend reads', 'Valid Sat-Sun only']
+        }
+      ]
     }
   };
 
@@ -201,13 +250,13 @@ const FeedbackForm = () => {
         zIndex: 10,
         background: '#fff',
         borderBottom: '1px solid #f5f5f5',
-        padding: '12px 20px'
+        padding: '10px 16px'
       }}>
-        <div style={{ maxWidth: '480px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ maxWidth: '480px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
             style={{
-              width: '36px',
-              height: '36px',
+              width: '32px',
+              height: '32px',
               borderRadius: '50%',
               border: 'none',
               background: '#f5f5f5',
@@ -218,23 +267,23 @@ const FeedbackForm = () => {
               flexShrink: 0
             }}
           >
-            <ArrowLeft style={{ width: '18px', height: '18px', color: '#171717' }} />
+            <ArrowLeft style={{ width: '16px', height: '16px', color: '#171717' }} />
           </button>
-          <h1 style={{ fontSize: '20px', fontWeight: 600, color: '#171717', margin: 0 }}>
+          <h1 style={{ fontSize: '18px', fontWeight: 600, color: '#171717', margin: 0 }}>
             Send Feedback
           </h1>
         </div>
       </div>
 
-      <div style={{ maxWidth: '480px', margin: '0 auto', padding: '32px 20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-          <div style={{ width: '60%', overflow: 'hidden', borderRadius: '8px' }}>
+      <div style={{ maxWidth: '480px', margin: '0 auto', padding: '16px 16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+          <div style={{ width: '40%', overflow: 'hidden', borderRadius: '6px' }}>
             <img src={image} alt="Feedback illustration" style={{ width: '100%', height: 'auto', transform: 'scale(1.2)', transformOrigin: 'center', border: 'none' }} />
           </div>
         </div>
 
         {/* Dropdowns Row */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
           <div style={{ flex: 1 }}>
             <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
               Issue type
@@ -244,8 +293,8 @@ const FeedbackForm = () => {
                 value={selectedType}
                 onChange={(e) => { setSelectedType(e.target.value); setSelectedSubtype(''); }}
                 style={{
-                  width: '100%', height: '44px', padding: '0 32px 0 12px', fontSize: '14px',
-                  background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '8px',
+                  width: '100%', height: '40px', padding: '0 32px 0 10px', fontSize: '13px',
+                  background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '6px',
                   appearance: 'none', cursor: 'pointer', outline: 'none',
                   color: selectedType ? '#171717' : '#a3a3a3'
                 }}
@@ -269,10 +318,10 @@ const FeedbackForm = () => {
                 onChange={(e) => setSelectedSubtype(e.target.value)}
                 disabled={!selectedType}
                 style={{
-                  width: '100%', height: '44px', padding: '0 32px 0 12px', fontSize: '14px',
+                  width: '100%', height: '40px', padding: '0 32px 0 10px', fontSize: '13px',
                   background: selectedType ? '#fafafa' : '#f5f5f5',
                   border: '1px solid', borderColor: selectedType ? '#e5e5e5' : '#f5f5f5',
-                  borderRadius: '8px', appearance: 'none',
+                  borderRadius: '6px', appearance: 'none',
                   cursor: selectedType ? 'pointer' : 'not-allowed', outline: 'none',
                   color: !selectedType ? '#d4d4d4' : selectedSubtype ? '#171717' : '#a3a3a3'
                 }}
@@ -289,13 +338,13 @@ const FeedbackForm = () => {
 
         {/* Thinking Animation - Show when solution exists (stays visible even after CTA click) */}
         {solutions[selectedSubtype] && (isAnalyzing || showHelp) && (
-          <div 
+          <div
             style={{
-              marginBottom: '20px',
-              padding: '14px 16px',
+              marginBottom: '10px',
+              padding: '10px 12px',
               background: '#fafafa',
               border: '1px solid #e5e5e5',
-              borderRadius: '8px',
+              borderRadius: '6px',
               opacity: isAnalyzing ? 0 : 1,
               animation: isAnalyzing ? 'fadeIn 0.3s ease-in-out forwards' : 'none'
             }}
@@ -338,11 +387,11 @@ const FeedbackForm = () => {
 
         {/* Help Block - Show when solution exists (stays visible even after CTA click) */}
         {solutions[selectedSubtype] && showHelp && (
-          <div 
+          <div
             style={{
-              marginBottom: '20px',
+              marginBottom: '10px',
               border: '1px solid #e5e5e5',
-              borderRadius: '8px',
+              borderRadius: '6px',
               overflow: 'hidden',
               opacity: 0,
               animation: 'fadeIn 0.3s ease-in-out forwards',
@@ -358,19 +407,19 @@ const FeedbackForm = () => {
               <button
                 onClick={() => setIsHelpExpanded(!isHelpExpanded)}
                 style={{
-                  width: '100%', padding: '14px 16px', background: '#fafafa', border: 'none',
-                  display: 'flex', alignItems: 'flex-start', gap: '12px', textAlign: 'left', cursor: 'pointer'
+                  width: '100%', padding: '10px 12px', background: '#fafafa', border: 'none',
+                  display: 'flex', alignItems: 'flex-start', gap: '10px', textAlign: 'left', cursor: 'pointer'
                 }}
               >
                 {(() => {
                   const IconComponent = solutions[selectedSubtype].icon;
-                  return IconComponent ? <IconComponent style={{ width: '22px', height: '22px', color: '#171717', flexShrink: 0 }} /> : null;
+                  return IconComponent ? <IconComponent style={{ width: '18px', height: '18px', color: '#171717', flexShrink: 0 }} /> : null;
                 })()}
                 <div style={{ flex: 1 }}>
-                  <h3 style={{ fontSize: '14px', fontWeight: 500, color: '#171717', margin: 0 }}>
+                  <h3 style={{ fontSize: '13px', fontWeight: 500, color: '#171717', margin: 0 }}>
                     {solutions[selectedSubtype].title}
                   </h3>
-                  <p style={{ fontSize: '12px', color: '#737373', margin: '2px 0 0' }}>
+                  <p style={{ fontSize: '11px', color: '#737373', margin: '1px 0 0' }}>
                     {solutions[selectedSubtype].subtitle}
                   </p>
                 </div>
@@ -382,9 +431,9 @@ const FeedbackForm = () => {
               </button>
 
               {isHelpExpanded && (
-                <div style={{ padding: '14px 16px', borderTop: '1px solid #f5f5f5' }}>
-                  <p style={{ fontSize: '11px', color: '#a3a3a3', margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Quick solutions</p>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
+                <div style={{ padding: '10px 12px', borderTop: '1px solid #f5f5f5' }}>
+                  <p style={{ fontSize: '10px', color: '#a3a3a3', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Quick solutions</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
                     {solutions[selectedSubtype].options.map((option, idx) => (
                       <button
                         key={idx}
@@ -392,18 +441,18 @@ const FeedbackForm = () => {
                         style={{
                           position: 'relative',
                           width: '100%',
-                          aspectRatio: '1',
-                          padding: '12px',
+                          padding: '10px',
                           background: '#fafafa',
                           border: '1px solid #e5e5e5',
-                          borderRadius: '8px',
+                          borderRadius: '6px',
                           cursor: 'pointer',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'flex-start',
                           justifyContent: 'space-between',
                           textAlign: 'left',
-                          transition: 'all 0.2s ease'
+                          transition: 'all 0.2s ease',
+                          minHeight: '90px'
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = '#f5f5f5';
@@ -415,22 +464,22 @@ const FeedbackForm = () => {
                         }}
                       >
                         <div style={{ flex: 1, width: '100%' }}>
-                          <h4 style={{ fontSize: '13px', fontWeight: 600, color: '#171717', margin: '0 0 4px', lineHeight: '1.3' }}>
+                          <h4 style={{ fontSize: '12px', fontWeight: 600, color: '#171717', margin: '0 0 2px', lineHeight: '1.3' }}>
                             {option.header || option.title}
                           </h4>
-                          <p style={{ fontSize: '11px', color: '#737373', margin: 0, lineHeight: '1.4' }}>
+                          <p style={{ fontSize: '10px', color: '#737373', margin: 0, lineHeight: '1.3' }}>
                             {option.subhead || ''}
                           </p>
                         </div>
-                        <div style={{ 
-                          width: '100%', 
-                          display: 'flex', 
-                          alignItems: 'center', 
+                        <div style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
                           justifyContent: 'space-between',
-                          marginTop: '8px'
+                          marginTop: '6px'
                         }}>
                           {option.type === 'paid' && (
-                            <span style={{ fontSize: '12px', fontWeight: 600, color: '#171717' }}>
+                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#171717' }}>
                               ₹{option.price}
                             </span>
                           )}
@@ -438,12 +487,12 @@ const FeedbackForm = () => {
                             <span style={{ width: '1px' }}></span>
                           )}
                           <span style={{
-                            fontSize: '11px',
+                            fontSize: '10px',
                             fontWeight: 500,
                             color: '#fff',
-                            background: option.type === 'free' ? '#171717' : '#171717',
-                            padding: '4px 10px',
-                            borderRadius: '12px'
+                            background: '#171717',
+                            padding: '3px 8px',
+                            borderRadius: '10px'
                           }}>
                             {option.type === 'free' ? 'Claim' : 'Unlock'}
                           </span>
@@ -463,15 +512,15 @@ const FeedbackForm = () => {
             onClick={() => setShowStillFacingIssue(true)}
             style={{
               width: '100%',
-              padding: '14px 16px',
+              padding: '10px 14px',
               background: '#171717',
               color: '#fff',
-              fontSize: '14px',
+              fontSize: '13px',
               fontWeight: 500,
               border: 'none',
-              borderRadius: '24px',
+              borderRadius: '20px',
               cursor: 'pointer',
-              marginBottom: '20px',
+              marginBottom: '12px',
               transition: 'background 0.2s ease'
             }}
             onMouseEnter={(e) => {
@@ -489,8 +538,8 @@ const FeedbackForm = () => {
         {(!solutions[selectedSubtype] || showStillFacingIssue) && selectedSubtype && (
           <>
             {/* Feedback Text */}
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
+            <div style={{ marginBottom: '12px' }}>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#737373', marginBottom: '4px' }}>
                 Describe the issue
               </label>
               <textarea
@@ -498,28 +547,28 @@ const FeedbackForm = () => {
                 onChange={(e) => setFeedbackText(e.target.value)}
                 placeholder="Tell us what happened..."
                 style={{
-                  width: '100%', height: '100px', padding: '12px', fontSize: '14px',
-                  background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '8px',
-                  resize: 'none', outline: 'none', color: '#171717', lineHeight: '1.5'
+                  width: '100%', height: '70px', padding: '10px', fontSize: '13px',
+                  background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '6px',
+                  resize: 'none', outline: 'none', color: '#171717', lineHeight: '1.4'
                 }}
               />
             </div>
 
             {/* Screenshot Upload */}
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
+            <div style={{ marginBottom: '12px' }}>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#737373', marginBottom: '4px' }}>
                 Screenshot (optional)
               </label>
               <button
                 onClick={handleImageUpload}
                 style={{
-                  width: '100%', height: '80px', border: '1px dashed #d4d4d4', borderRadius: '8px',
+                  width: '100%', height: '56px', border: '1px dashed #d4d4d4', borderRadius: '6px',
                   background: 'transparent', display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer'
+                  alignItems: 'center', justifyContent: 'center', gap: '2px', cursor: 'pointer'
                 }}
               >
-                <Camera style={{ width: '20px', height: '20px', color: '#a3a3a3' }} />
-                <span style={{ fontSize: '12px', color: '#737373' }}>Tap to upload</span>
+                <Camera style={{ width: '18px', height: '18px', color: '#a3a3a3' }} />
+                <span style={{ fontSize: '11px', color: '#737373' }}>Tap to upload</span>
               </button>
             </div>
           </>
@@ -530,14 +579,14 @@ const FeedbackForm = () => {
           <button
             disabled={!canSubmit}
             style={{
-              width: '100%', height: '44px', background: canSubmit ? '#171717' : '#e5e5e5',
-              color: canSubmit ? '#fff' : '#a3a3a3', fontSize: '14px', fontWeight: 500,
-              border: 'none', borderRadius: '22px', cursor: canSubmit ? 'pointer' : 'not-allowed',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              width: '100%', height: '38px', background: canSubmit ? '#171717' : '#e5e5e5',
+              color: canSubmit ? '#fff' : '#a3a3a3', fontSize: '13px', fontWeight: 500,
+              border: 'none', borderRadius: '19px', cursor: canSubmit ? 'pointer' : 'not-allowed',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
               transition: 'background 0.2s, color 0.2s'
             }}
           >
-            <Send style={{ width: '16px', height: '16px' }} />
+            <Send style={{ width: '14px', height: '14px' }} />
             Send Feedback
           </button>
         )}
