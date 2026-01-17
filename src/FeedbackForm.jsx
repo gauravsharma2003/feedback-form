@@ -11,6 +11,7 @@ const FeedbackForm = () => {
   const [feedbackText, setFeedbackText] = useState('');
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [selectedSolution, setSelectedSolution] = useState(null);
+  const [thinkingTextIndex, setThinkingTextIndex] = useState(0);
 
   const problemTypes = [
     { id: 'content', label: 'Content & Credibility' },
@@ -135,14 +136,27 @@ const FeedbackForm = () => {
       setIsAnalyzing(true);
       setShowHelp(false);
       setIsHelpExpanded(true);
-      const timer = setTimeout(() => {
+      setThinkingTextIndex(0);
+      
+      // Change text after 1.5 seconds
+      const textTimer = setTimeout(() => {
+        setThinkingTextIndex(1);
+      }, 1500);
+      
+      // Show help after 2.5 seconds total
+      const helpTimer = setTimeout(() => {
         setIsAnalyzing(false);
         setShowHelp(true);
-      }, 1200);
-      return () => clearTimeout(timer);
+      }, 2500);
+      
+      return () => {
+        clearTimeout(textTimer);
+        clearTimeout(helpTimer);
+      };
     } else {
       setShowHelp(false);
       setIsAnalyzing(false);
+      setThinkingTextIndex(0);
     }
   }, [selectedSubtype]);
 
@@ -293,7 +307,26 @@ const FeedbackForm = () => {
                     <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.15s' }} />
                     <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.3s' }} />
                   </div>
-                  <span style={{ fontSize: '13px', color: '#737373' }}>Checking for quick solutions...</span>
+                  <span 
+                    style={{ 
+                      fontSize: '13px', 
+                      color: '#737373',
+                      position: 'relative',
+                      display: 'inline-block',
+                      minWidth: '200px'
+                    }}
+                  >
+                    <span
+                      key={thinkingTextIndex}
+                      style={{
+                        display: 'inline-block',
+                        opacity: 0,
+                        animation: 'fadeInText 0.5s ease-in-out forwards'
+                      }}
+                    >
+                      {thinkingTextIndex === 0 ? 'Checking for quick solutions...' : 'We might have a solve for this'}
+                    </span>
+                  </span>
                 </div>
               </div>
             )}
@@ -494,6 +527,7 @@ const FeedbackForm = () => {
       <style>{`
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInText { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         * { box-sizing: border-box; margin: 0; padding: 0; }
       `}</style>
     </div>
