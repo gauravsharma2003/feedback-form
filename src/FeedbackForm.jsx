@@ -163,7 +163,9 @@ const FeedbackForm = () => {
 
       <div style={{ maxWidth: '480px', margin: '0 auto', padding: '32px 20px' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-          <img src={image} alt="Feedback illustration" style={{ maxWidth: '100%', height: 'auto' }} />
+          <div style={{ width: '60%', overflow: 'hidden', borderRadius: '8px' }}>
+            <img src={image} alt="Feedback illustration" style={{ width: '100%', height: 'auto', transform: 'scale(1.2)', transformOrigin: 'center', border: 'none' }} />
+          </div>
         </div>
 
         {/* Dropdowns Row */}
