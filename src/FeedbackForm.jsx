@@ -65,11 +65,11 @@ const FeedbackForm = () => {
           steps: ['Open Settings from the menu', 'Navigate to Display Settings', 'Use the Text Size slider to adjust', 'Changes apply instantly'] 
         },
         { 
-          header: 'Old Mode', 
+          header: 'Senior Citizens Mode',
           subhead: 'Bigger text, simpler layout, easier reading.',
           type: 'paid',
           price: 9,
-          steps: ['Go to Settings', 'Select Display Options', 'Enable Old Mode', 'Enjoy the classic reading interface'] 
+          steps: ['Go to Settings', 'Select Display Options', 'Enable Senior Citizens Mode', 'Enjoy the classic reading interface'] 
         }
       ]
     },
