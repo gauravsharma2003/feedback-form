@@ -538,10 +538,11 @@ const FeedbackForm = () => {
                       }} />
                       <div style={{ flex: 1, width: '100%', position: 'relative', zIndex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
-                          <Sparkles style={{ width: '12px', height: '12px', color: '#7c6eaa' }} />
                           <h4 style={{ fontSize: '12px', fontWeight: 600, color: '#171717', margin: 0, lineHeight: '1.3' }}>
-                            Personalize your app
+                          <Sparkles style={{ width: '12px', height: '12px', color: '#7c6eaa' }} />
+                          Personalize your app 
                           </h4>
+                          
                         </div>
                         <p style={{ fontSize: '10px', color: '#737373', margin: 0, lineHeight: '1.3' }}>
                           Discover tools that work your way
