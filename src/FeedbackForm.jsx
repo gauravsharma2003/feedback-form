@@ -12,6 +12,7 @@ const FeedbackForm = () => {
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [selectedSolution, setSelectedSolution] = useState(null);
   const [thinkingTextIndex, setThinkingTextIndex] = useState(0);
+  const [showStillFacingIssue, setShowStillFacingIssue] = useState(false);
 
   const problemTypes = [
     { id: 'content', label: 'Content & Credibility' },
@@ -132,31 +133,43 @@ const FeedbackForm = () => {
   };
 
   useEffect(() => {
-    if (selectedSubtype && solutions[selectedSubtype]) {
-      setIsAnalyzing(true);
-      setShowHelp(false);
-      setIsHelpExpanded(true);
-      setThinkingTextIndex(0);
-      
-      // Change text after 1.5 seconds
-      const textTimer = setTimeout(() => {
-        setThinkingTextIndex(1);
-      }, 1500);
-      
-      // Show help after 2.5 seconds total
-      const helpTimer = setTimeout(() => {
+    if (selectedSubtype) {
+      if (solutions[selectedSubtype]) {
+        // Has solution - show thinking animation
+        setIsAnalyzing(true);
+        setShowHelp(false);
+        setIsHelpExpanded(true);
+        setThinkingTextIndex(0);
+        setShowStillFacingIssue(false);
+        
+        // Change text after 1.5 seconds
+        const textTimer = setTimeout(() => {
+          setThinkingTextIndex(1);
+        }, 1500);
+        
+        // Show help after 2.5 seconds total
+        const helpTimer = setTimeout(() => {
+          setIsAnalyzing(false);
+          setShowHelp(true);
+        }, 2500);
+        
+        return () => {
+          clearTimeout(textTimer);
+          clearTimeout(helpTimer);
+        };
+      } else {
+        // No solution - show feedback form immediately
+        setShowHelp(false);
         setIsAnalyzing(false);
-        setShowHelp(true);
-      }, 2500);
-      
-      return () => {
-        clearTimeout(textTimer);
-        clearTimeout(helpTimer);
-      };
+        setThinkingTextIndex(0);
+        setShowStillFacingIssue(true); // Show feedback form
+      }
     } else {
+      // No subtype selected - reset everything
       setShowHelp(false);
       setIsAnalyzing(false);
       setThinkingTextIndex(0);
+      setShowStillFacingIssue(false);
     }
   }, [selectedSubtype]);
 
@@ -274,224 +287,260 @@ const FeedbackForm = () => {
           </div>
         </div>
 
-        {/* Analyzing/Help Block - Combined container that expands - Always in DOM above screenshot */}
-        <div 
-          style={{
-            marginBottom: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? '20px' : '0',
-            border: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? '1px solid #e5e5e5' : 'transparent',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            opacity: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? 0 : 0,
-            animation: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? 'fadeIn 0.3s ease-in-out forwards' : 'none',
-            position: 'relative',
-            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-            minHeight: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? 'auto' : '0',
-            maxHeight: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? '1000px' : '0'
-          }}
-        >
-          {(isAnalyzing || showHelp) && solutions[selectedSubtype] && (
-            <>
-            {isAnalyzing && (
-              <div style={{ 
-                padding: '14px 16px', 
-                background: '#fafafa',
-                position: 'relative',
-                zIndex: 1,
-                opacity: isAnalyzing ? 1 : 0,
-                transition: 'opacity 0.3s ease-in-out, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: showHelp ? 'translateY(-100%)' : 'translateY(0)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ display: 'flex', gap: '4px' }}>
-                    <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite' }} />
-                    <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.15s' }} />
-                    <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.3s' }} />
-                  </div>
-                  <span 
-                    style={{ 
-                      fontSize: '13px', 
-                      color: '#737373',
-                      position: 'relative',
-                      display: 'inline-block',
-                      minWidth: '200px'
-                    }}
-                  >
-                    <span
-                      key={thinkingTextIndex}
-                      style={{
-                        display: 'inline-block',
-                        opacity: 0,
-                        animation: 'fadeInText 0.5s ease-in-out forwards'
-                      }}
-                    >
-                      {thinkingTextIndex === 0 ? 'Checking for quick solutions...' : 'We might have a solve for this'}
-                    </span>
-                  </span>
-                </div>
-              </div>
-            )}
-            {showHelp && (
-              <div style={{ 
-                position: 'relative',
-                zIndex: 2,
-                opacity: 0,
-                animation: 'fadeIn 0.4s ease-in-out 0.2s forwards',
-                transform: isAnalyzing ? 'translateY(-20px)' : 'translateY(0)',
-                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s'
-              }}>
-                <button
-                  onClick={() => setIsHelpExpanded(!isHelpExpanded)}
-                  style={{
-                    width: '100%', padding: '14px 16px', background: '#fafafa', border: 'none',
-                    display: 'flex', alignItems: 'flex-start', gap: '12px', textAlign: 'left', cursor: 'pointer'
-                  }}
-                >
-                  {(() => {
-                    const IconComponent = solutions[selectedSubtype].icon;
-                    return IconComponent ? <IconComponent style={{ width: '22px', height: '22px', color: '#171717', flexShrink: 0 }} /> : null;
-                  })()}
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ fontSize: '14px', fontWeight: 500, color: '#171717', margin: 0 }}>
-                      {solutions[selectedSubtype].title}
-                    </h3>
-                    <p style={{ fontSize: '12px', color: '#737373', margin: '2px 0 0' }}>
-                      {solutions[selectedSubtype].subtitle}
-                    </p>
-                  </div>
-                  {isHelpExpanded ? (
-                    <ChevronUp style={{ width: '16px', height: '16px', color: '#a3a3a3', marginTop: '2px' }} />
-                  ) : (
-                    <ChevronDown style={{ width: '16px', height: '16px', color: '#a3a3a3', marginTop: '2px' }} />
-                  )}
-                </button>
-
-                {isHelpExpanded && (
-                  <div style={{ padding: '14px 16px', borderTop: '1px solid #f5f5f5' }}>
-                    <p style={{ fontSize: '11px', color: '#a3a3a3', margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Quick solutions</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
-                      {solutions[selectedSubtype].options.map((option, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => openSolution(option)}
-                          style={{
-                            position: 'relative',
-                            width: '100%',
-                            aspectRatio: '1',
-                            padding: '12px',
-                            background: '#fafafa',
-                            border: '1px solid #e5e5e5',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                            justifyContent: 'space-between',
-                            textAlign: 'left',
-                            transition: 'all 0.2s ease'
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#f5f5f5';
-                            e.currentTarget.style.borderColor = '#d4d4d4';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = '#fafafa';
-                            e.currentTarget.style.borderColor = '#e5e5e5';
-                          }}
-                        >
-                          <div style={{ flex: 1, width: '100%' }}>
-                            <h4 style={{ fontSize: '13px', fontWeight: 600, color: '#171717', margin: '0 0 4px', lineHeight: '1.3' }}>
-                              {option.header || option.title}
-                            </h4>
-                            <p style={{ fontSize: '11px', color: '#737373', margin: 0, lineHeight: '1.4' }}>
-                              {option.subhead || ''}
-                            </p>
-                          </div>
-                          <div style={{ 
-                            width: '100%', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'space-between',
-                            marginTop: '8px'
-                          }}>
-                            {option.type === 'paid' && (
-                              <span style={{ fontSize: '12px', fontWeight: 600, color: '#171717' }}>
-                                ₹{option.price}
-                              </span>
-                            )}
-                            {option.type === 'free' && (
-                              <span style={{ width: '1px' }}></span>
-                            )}
-                            <span style={{
-                              fontSize: '11px',
-                              fontWeight: 500,
-                              color: '#fff',
-                              background: option.type === 'free' ? '#171717' : '#171717',
-                              padding: '4px 10px',
-                              borderRadius: '12px'
-                            }}>
-                              {option.type === 'free' ? 'Claim' : 'Unlock'}
-                            </span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-            </>
-          )}
-        </div>
-
-        {/* Screenshot Upload - Always visible */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
-            Screenshot (optional)
-          </label>
-          <button
-            onClick={handleImageUpload}
+        {/* Thinking Animation - Show when solution exists (stays visible even after CTA click) */}
+        {solutions[selectedSubtype] && (isAnalyzing || showHelp) && (
+          <div 
             style={{
-              width: '100%', height: '80px', border: '1px dashed #d4d4d4', borderRadius: '8px',
-              background: 'transparent', display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer'
+              marginBottom: '20px',
+              padding: '14px 16px',
+              background: '#fafafa',
+              border: '1px solid #e5e5e5',
+              borderRadius: '8px',
+              opacity: isAnalyzing ? 0 : 1,
+              animation: isAnalyzing ? 'fadeIn 0.3s ease-in-out forwards' : 'none'
             }}
           >
-            <Camera style={{ width: '20px', height: '20px', color: '#a3a3a3' }} />
-            <span style={{ fontSize: '12px', color: '#737373' }}>Tap to upload</span>
-          </button>
-        </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {isAnalyzing && (
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite' }} />
+                  <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.15s' }} />
+                  <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.3s' }} />
+                </div>
+              )}
+              <span 
+                style={{ 
+                  fontSize: '13px', 
+                  color: '#737373',
+                  position: 'relative',
+                  display: 'inline-block',
+                  minWidth: '200px'
+                }}
+              >
+                {isAnalyzing ? (
+                  <span
+                    key={thinkingTextIndex}
+                    style={{
+                      display: 'inline-block',
+                      opacity: 0,
+                      animation: 'fadeInText 0.5s ease-in-out forwards'
+                    }}
+                  >
+                    {thinkingTextIndex === 0 ? 'Checking for quick solutions...' : 'We might have a solve for this'}
+                  </span>
+                ) : (
+                  <span>We might have a solve for this</span>
+                )}
+              </span>
+            </div>
+          </div>
+        )}
 
-        {/* Feedback Text - Always visible */}
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
-            Describe the issue
-          </label>
-          <textarea
-            value={feedbackText}
-            onChange={(e) => setFeedbackText(e.target.value)}
-            placeholder="Tell us what happened..."
+        {/* Help Block - Show when solution exists (stays visible even after CTA click) */}
+        {solutions[selectedSubtype] && showHelp && (
+          <div 
             style={{
-              width: '100%', height: '100px', padding: '12px', fontSize: '14px',
-              background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '8px',
-              resize: 'none', outline: 'none', color: '#171717', lineHeight: '1.5'
+              marginBottom: '20px',
+              border: '1px solid #e5e5e5',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              opacity: 0,
+              animation: 'fadeIn 0.3s ease-in-out forwards',
+              position: 'relative'
             }}
-          />
-        </div>
+          >
+            <div style={{ 
+              position: 'relative',
+              zIndex: 2,
+              opacity: 0,
+              animation: 'fadeIn 0.4s ease-in-out 0.2s forwards'
+            }}>
+              <button
+                onClick={() => setIsHelpExpanded(!isHelpExpanded)}
+                style={{
+                  width: '100%', padding: '14px 16px', background: '#fafafa', border: 'none',
+                  display: 'flex', alignItems: 'flex-start', gap: '12px', textAlign: 'left', cursor: 'pointer'
+                }}
+              >
+                {(() => {
+                  const IconComponent = solutions[selectedSubtype].icon;
+                  return IconComponent ? <IconComponent style={{ width: '22px', height: '22px', color: '#171717', flexShrink: 0 }} /> : null;
+                })()}
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '14px', fontWeight: 500, color: '#171717', margin: 0 }}>
+                    {solutions[selectedSubtype].title}
+                  </h3>
+                  <p style={{ fontSize: '12px', color: '#737373', margin: '2px 0 0' }}>
+                    {solutions[selectedSubtype].subtitle}
+                  </p>
+                </div>
+                {isHelpExpanded ? (
+                  <ChevronUp style={{ width: '16px', height: '16px', color: '#a3a3a3', marginTop: '2px' }} />
+                ) : (
+                  <ChevronDown style={{ width: '16px', height: '16px', color: '#a3a3a3', marginTop: '2px' }} />
+                )}
+              </button>
 
-        {/* Submit Button */}
-        <button
-          disabled={!canSubmit}
-          style={{
-            width: '100%', height: '44px', background: canSubmit ? '#171717' : '#e5e5e5',
-            color: canSubmit ? '#fff' : '#a3a3a3', fontSize: '14px', fontWeight: 500,
-            border: 'none', borderRadius: '8px', cursor: canSubmit ? 'pointer' : 'not-allowed',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-            transition: 'background 0.2s, color 0.2s'
-          }}
-        >
-          <Send style={{ width: '16px', height: '16px' }} />
-          Send Feedback
-        </button>
+              {isHelpExpanded && (
+                <div style={{ padding: '14px 16px', borderTop: '1px solid #f5f5f5' }}>
+                  <p style={{ fontSize: '11px', color: '#a3a3a3', margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Quick solutions</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
+                    {solutions[selectedSubtype].options.map((option, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => openSolution(option)}
+                        style={{
+                          position: 'relative',
+                          width: '100%',
+                          aspectRatio: '1',
+                          padding: '12px',
+                          background: '#fafafa',
+                          border: '1px solid #e5e5e5',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          justifyContent: 'space-between',
+                          textAlign: 'left',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#f5f5f5';
+                          e.currentTarget.style.borderColor = '#d4d4d4';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#fafafa';
+                          e.currentTarget.style.borderColor = '#e5e5e5';
+                        }}
+                      >
+                        <div style={{ flex: 1, width: '100%' }}>
+                          <h4 style={{ fontSize: '13px', fontWeight: 600, color: '#171717', margin: '0 0 4px', lineHeight: '1.3' }}>
+                            {option.header || option.title}
+                          </h4>
+                          <p style={{ fontSize: '11px', color: '#737373', margin: 0, lineHeight: '1.4' }}>
+                            {option.subhead || ''}
+                          </p>
+                        </div>
+                        <div style={{ 
+                          width: '100%', 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'space-between',
+                          marginTop: '8px'
+                        }}>
+                          {option.type === 'paid' && (
+                            <span style={{ fontSize: '12px', fontWeight: 600, color: '#171717' }}>
+                              ₹{option.price}
+                            </span>
+                          )}
+                          {option.type === 'free' && (
+                            <span style={{ width: '1px' }}></span>
+                          )}
+                          <span style={{
+                            fontSize: '11px',
+                            fontWeight: 500,
+                            color: '#fff',
+                            background: option.type === 'free' ? '#171717' : '#171717',
+                            padding: '4px 10px',
+                            borderRadius: '12px'
+                          }}>
+                            {option.type === 'free' ? 'Claim' : 'Unlock'}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Still Facing Issue CTA - Show when solution exists and user hasn't clicked it */}
+        {solutions[selectedSubtype] && showHelp && !showStillFacingIssue && (
+          <button
+            onClick={() => setShowStillFacingIssue(true)}
+            style={{
+              width: '100%',
+              padding: '14px 16px',
+              background: '#171717',
+              color: '#fff',
+              fontSize: '14px',
+              fontWeight: 500,
+              border: 'none',
+              borderRadius: '24px',
+              cursor: 'pointer',
+              marginBottom: '20px',
+              transition: 'background 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#262626';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#171717';
+            }}
+          >
+            Still facing the issue?
+          </button>
+        )}
+
+        {/* Feedback Form - Show when no solution OR user clicked "Still facing the issue" */}
+        {(!solutions[selectedSubtype] || showStillFacingIssue) && selectedSubtype && (
+          <>
+            {/* Feedback Text */}
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
+                Describe the issue
+              </label>
+              <textarea
+                value={feedbackText}
+                onChange={(e) => setFeedbackText(e.target.value)}
+                placeholder="Tell us what happened..."
+                style={{
+                  width: '100%', height: '100px', padding: '12px', fontSize: '14px',
+                  background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '8px',
+                  resize: 'none', outline: 'none', color: '#171717', lineHeight: '1.5'
+                }}
+              />
+            </div>
+
+            {/* Screenshot Upload */}
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
+                Screenshot (optional)
+              </label>
+              <button
+                onClick={handleImageUpload}
+                style={{
+                  width: '100%', height: '80px', border: '1px dashed #d4d4d4', borderRadius: '8px',
+                  background: 'transparent', display: 'flex', flexDirection: 'column',
+                  alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer'
+                }}
+              >
+                <Camera style={{ width: '20px', height: '20px', color: '#a3a3a3' }} />
+                <span style={{ fontSize: '12px', color: '#737373' }}>Tap to upload</span>
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* Submit Button - Only show when feedback form is visible */}
+        {(!solutions[selectedSubtype] || showStillFacingIssue) && selectedSubtype && (
+          <button
+            disabled={!canSubmit}
+            style={{
+              width: '100%', height: '44px', background: canSubmit ? '#171717' : '#e5e5e5',
+              color: canSubmit ? '#fff' : '#a3a3a3', fontSize: '14px', fontWeight: 500,
+              border: 'none', borderRadius: '22px', cursor: canSubmit ? 'pointer' : 'not-allowed',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              transition: 'background 0.2s, color 0.2s'
+            }}
+          >
+            <Send style={{ width: '16px', height: '16px' }} />
+            Send Feedback
+          </button>
+        )}
       </div>
 
       {/* Bottom Sheet */}
