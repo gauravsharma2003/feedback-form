@@ -265,7 +265,7 @@ const FeedbackForm = () => {
 
       <div style={{ maxWidth: '480px', margin: '0 auto', padding: '16px 16px' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
-          <div style={{ width: '40%', overflow: 'hidden', borderRadius: '6px' }}>
+          <div style={{ width: '55%', overflow: 'hidden', borderRadius: '6px' }}>
             <img src={image} alt="Feedback illustration" style={{ width: '100%', height: 'auto', transform: 'scale(1.2)', transformOrigin: 'center', border: 'none' }} />
           </div>
         </div>
