@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronDown, ChevronUp, Camera, Send, ArrowLeft, Type, Moon, Bell, Image as ImageIcon, Zap, RefreshCw } from 'lucide-react';
+import { X, ChevronDown, ChevronUp, Camera, Send, ArrowLeft, Type, Moon, Bell, Image as ImageIcon, Zap, RefreshCw, Sparkles } from 'lucide-react';
 import image from './assets/image.png';
 
 const FeedbackForm = () => {
@@ -133,16 +133,10 @@ const FeedbackForm = () => {
       subtitle: 'Enjoy uninterrupted reading experience',
       options: [
         {
-          header: 'TOI+',
+          header: 'TOI+ / ET Prime',
           subhead: 'Premium ad-free experience',
           type: 'free',
-          steps: ['Subscribe to TOI+', 'Access exclusive content', 'Enjoy ad-free reading', 'Support quality journalism']
-        },
-        {
-          header: 'ET Prime',
-          subhead: 'Ad-free business news',
-          type: 'free',
-          steps: ['Subscribe to ET Prime', 'Get premium business insights', 'Read without interruptions', 'Access exclusive analysis']
+          steps: ['Subscribe to TOI+ or ET Prime', 'Access exclusive content', 'Enjoy ad-free reading', 'Support quality journalism']
         },
         {
           header: 'Weekend Pass',
@@ -159,16 +153,10 @@ const FeedbackForm = () => {
       subtitle: 'Personalize your news feed for better content',
       options: [
         {
-          header: 'TOI+',
+          header: 'TOI+ / ET Prime',
           subhead: 'Curated quality articles',
           type: 'free',
-          steps: ['Subscribe to TOI+', 'Access handpicked stories', 'Get in-depth journalism', 'Quality over quantity']
-        },
-        {
-          header: 'ET Prime',
-          subhead: 'Premium quality content',
-          type: 'free',
-          steps: ['Subscribe to ET Prime', 'Expert-curated articles', 'Deep-dive analysis', 'Quality business journalism']
+          steps: ['Subscribe to TOI+ or ET Prime', 'Access handpicked stories', 'Get in-depth journalism', 'Quality over quantity']
         },
         {
           header: 'Weekend Pass',
@@ -499,6 +487,87 @@ const FeedbackForm = () => {
                         </div>
                       </button>
                     ))}
+                    {/* Explore All Tools - Constant last box */}
+                    <button
+                      onClick={() => {
+                        const toast = document.createElement('div');
+                        toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#262626;color:#fff;font-size:14px;padding:10px 16px;border-radius:8px;z-index:9999;';
+                        toast.textContent = 'Exploring all tools...';
+                        document.body.appendChild(toast);
+                        setTimeout(() => {
+                          toast.style.opacity = '0';
+                          toast.style.transition = 'opacity 0.2s';
+                          setTimeout(() => toast.remove(), 200);
+                        }, 2000);
+                      }}
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        padding: '10px',
+                        background: 'linear-gradient(135deg, #f8f7ff 0%, #f0f4ff 50%, #f7f0ff 100%)',
+                        border: '1px solid #e0e0f0',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        justifyContent: 'space-between',
+                        textAlign: 'left',
+                        transition: 'all 0.3s ease',
+                        minHeight: '90px',
+                        overflow: 'hidden'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = '#c0c0e0';
+                        e.currentTarget.style.boxShadow = '0 2px 12px rgba(120, 100, 200, 0.15)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = '#e0e0f0';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: '-100%',
+                        width: '200%',
+                        height: '100%',
+                        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
+                        animation: 'shimmer 3s infinite',
+                        pointerEvents: 'none'
+                      }} />
+                      <div style={{ flex: 1, width: '100%', position: 'relative', zIndex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                          <Sparkles style={{ width: '12px', height: '12px', color: '#7c6eaa' }} />
+                          <h4 style={{ fontSize: '12px', fontWeight: 600, color: '#171717', margin: 0, lineHeight: '1.3' }}>
+                            Personalize your app
+                          </h4>
+                        </div>
+                        <p style={{ fontSize: '10px', color: '#737373', margin: 0, lineHeight: '1.3' }}>
+                          Discover tools that work your way
+                        </p>
+                      </div>
+                      <div style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        marginTop: '6px',
+                        position: 'relative',
+                        zIndex: 1
+                      }}>
+                        <span style={{
+                          fontSize: '10px',
+                          fontWeight: 500,
+                          color: '#7c6eaa',
+                          background: 'rgba(124, 110, 170, 0.1)',
+                          padding: '3px 8px',
+                          borderRadius: '10px'
+                        }}>
+                          Explore
+                        </span>
+                      </div>
+                    </button>
                   </div>
                 </div>
               )}
@@ -629,6 +698,7 @@ const FeedbackForm = () => {
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInText { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shimmer { 0% { transform: translateX(0); } 100% { transform: translateX(100%); } }
         * { box-sizing: border-box; margin: 0; padding: 0; }
       `}</style>
     </div>
