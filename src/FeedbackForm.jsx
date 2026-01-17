@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronDown, ChevronUp, Camera, Send, ArrowLeft } from 'lucide-react';
+import { X, ChevronDown, ChevronUp, Camera, Send, ArrowLeft, Type, Moon, Bell, Image as ImageIcon, Zap, RefreshCw } from 'lucide-react';
 import image from './assets/image.png';
 
 const FeedbackForm = () => {
@@ -53,7 +53,7 @@ const FeedbackForm = () => {
 
   const solutions = {
     'Font Size / Readability': {
-      icon: '🔤',
+      icon: Type,
       title: 'Text Size Settings Available',
       subtitle: 'You can customize font size to your preference',
       options: [
@@ -73,7 +73,7 @@ const FeedbackForm = () => {
       ]
     },
     'Dark Mode / Brightness': {
-      icon: '🌙',
+      icon: Moon,
       title: 'Theme Customization',
       subtitle: 'Switch between Light, Dark, or Auto themes',
       options: [{ 
@@ -84,7 +84,7 @@ const FeedbackForm = () => {
       }]
     },
     'Notifications Issues': {
-      icon: '🔔',
+      icon: Bell,
       title: 'Notification Controls',
       subtitle: 'Manage frequency and types of alerts',
       options: [{ 
@@ -96,7 +96,7 @@ const FeedbackForm = () => {
       }]
     },
     'Images Not Loading': {
-      icon: '🖼️',
+      icon: ImageIcon,
       title: 'Image Loading Settings',
       subtitle: 'Optimize for your network connection',
       options: [{ 
@@ -107,7 +107,7 @@ const FeedbackForm = () => {
       }]
     },
     'App Crashing / Freezing': {
-      icon: '⚡',
+      icon: Zap,
       title: 'Quick Fixes',
       subtitle: 'Common solutions for stability issues',
       options: [{ 
@@ -118,7 +118,7 @@ const FeedbackForm = () => {
       }]
     },
     'Login / Sync Issues': {
-      icon: '🔄',
+      icon: RefreshCw,
       title: 'Sync Your Content',
       subtitle: 'Refresh and re-sync your data',
       options: [{ 
@@ -346,7 +346,10 @@ const FeedbackForm = () => {
                     display: 'flex', alignItems: 'flex-start', gap: '12px', textAlign: 'left', cursor: 'pointer'
                   }}
                 >
-                  <span style={{ fontSize: '22px', lineHeight: 1 }}>{solutions[selectedSubtype].icon}</span>
+                  {(() => {
+                    const IconComponent = solutions[selectedSubtype].icon;
+                    return IconComponent ? <IconComponent style={{ width: '22px', height: '22px', color: '#171717', flexShrink: 0 }} /> : null;
+                  })()}
                   <div style={{ flex: 1 }}>
                     <h3 style={{ fontSize: '14px', fontWeight: 500, color: '#171717', margin: 0 }}>
                       {solutions[selectedSubtype].title}
