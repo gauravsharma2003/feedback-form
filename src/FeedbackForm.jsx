@@ -220,6 +220,100 @@ const FeedbackForm = () => {
           </div>
         </div>
 
+        {/* Analyzing/Help Block - Combined container that expands - Always in DOM above screenshot */}
+        <div 
+          style={{
+            marginBottom: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? '20px' : '0',
+            border: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? '1px solid #e5e5e5' : 'transparent',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            opacity: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? 0 : 0,
+            animation: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? 'fadeIn 0.3s ease-in-out forwards' : 'none',
+            position: 'relative',
+            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            minHeight: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? 'auto' : '0',
+            maxHeight: ((isAnalyzing || showHelp) && solutions[selectedSubtype]) ? '1000px' : '0'
+          }}
+        >
+          {(isAnalyzing || showHelp) && solutions[selectedSubtype] && (
+            <>
+            {isAnalyzing && (
+              <div style={{ 
+                padding: '14px 16px', 
+                background: '#fafafa',
+                position: 'relative',
+                zIndex: 1,
+                opacity: isAnalyzing ? 1 : 0,
+                transition: 'opacity 0.3s ease-in-out, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                transform: showHelp ? 'translateY(-100%)' : 'translateY(0)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ display: 'flex', gap: '4px' }}>
+                    <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite' }} />
+                    <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.15s' }} />
+                    <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.3s' }} />
+                  </div>
+                  <span style={{ fontSize: '13px', color: '#737373' }}>Checking for quick solutions...</span>
+                </div>
+              </div>
+            )}
+            {showHelp && (
+              <div style={{ 
+                position: 'relative',
+                zIndex: 2,
+                opacity: 0,
+                animation: 'fadeIn 0.4s ease-in-out 0.2s forwards',
+                transform: isAnalyzing ? 'translateY(-20px)' : 'translateY(0)',
+                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s'
+              }}>
+                <button
+                  onClick={() => setIsHelpExpanded(!isHelpExpanded)}
+                  style={{
+                    width: '100%', padding: '14px 16px', background: '#fafafa', border: 'none',
+                    display: 'flex', alignItems: 'flex-start', gap: '12px', textAlign: 'left', cursor: 'pointer'
+                  }}
+                >
+                  <span style={{ fontSize: '22px', lineHeight: 1 }}>{solutions[selectedSubtype].icon}</span>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: 500, color: '#171717', margin: 0 }}>
+                      {solutions[selectedSubtype].title}
+                    </h3>
+                    <p style={{ fontSize: '12px', color: '#737373', margin: '2px 0 0' }}>
+                      {solutions[selectedSubtype].subtitle}
+                    </p>
+                  </div>
+                  {isHelpExpanded ? (
+                    <ChevronUp style={{ width: '16px', height: '16px', color: '#a3a3a3', marginTop: '2px' }} />
+                  ) : (
+                    <ChevronDown style={{ width: '16px', height: '16px', color: '#a3a3a3', marginTop: '2px' }} />
+                  )}
+                </button>
+
+                {isHelpExpanded && (
+                  <div style={{ padding: '14px 16px', borderTop: '1px solid #f5f5f5' }}>
+                    <p style={{ fontSize: '11px', color: '#a3a3a3', margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Quick solutions</p>
+                    <div style={{ display: 'flex', gap: '8px', overflowX: 'auto' }}>
+                      {solutions[selectedSubtype].options.map((option, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => openSolution(option)}
+                          style={{
+                            flexShrink: 0, padding: '10px 14px', background: '#f5f5f5', border: 'none',
+                            borderRadius: '6px', fontSize: '13px', fontWeight: 500, color: '#525252', cursor: 'pointer'
+                          }}
+                        >
+                          {option.title}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            </>
+          )}
+        </div>
+
         {/* Screenshot Upload - Always visible */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
@@ -254,68 +348,6 @@ const FeedbackForm = () => {
             }}
           />
         </div>
-
-        {/* Analyzing State */}
-        {isAnalyzing && (
-          <div style={{ marginBottom: '20px', padding: '14px 16px', background: '#fafafa', borderRadius: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite' }} />
-                <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.15s' }} />
-                <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.3s' }} />
-              </div>
-              <span style={{ fontSize: '13px', color: '#737373' }}>Checking for quick solutions...</span>
-            </div>
-          </div>
-        )}
-
-        {/* Help Block */}
-        {showHelp && solutions[selectedSubtype] && (
-          <div style={{ marginBottom: '20px', border: '1px solid #e5e5e5', borderRadius: '8px', overflow: 'hidden' }}>
-            <button
-              onClick={() => setIsHelpExpanded(!isHelpExpanded)}
-              style={{
-                width: '100%', padding: '14px 16px', background: '#fafafa', border: 'none',
-                display: 'flex', alignItems: 'flex-start', gap: '12px', textAlign: 'left', cursor: 'pointer'
-              }}
-            >
-              <span style={{ fontSize: '22px', lineHeight: 1 }}>{solutions[selectedSubtype].icon}</span>
-              <div style={{ flex: 1 }}>
-                <h3 style={{ fontSize: '14px', fontWeight: 500, color: '#171717', margin: 0 }}>
-                  {solutions[selectedSubtype].title}
-                </h3>
-                <p style={{ fontSize: '12px', color: '#737373', margin: '2px 0 0' }}>
-                  {solutions[selectedSubtype].subtitle}
-                </p>
-              </div>
-              {isHelpExpanded ? (
-                <ChevronUp style={{ width: '16px', height: '16px', color: '#a3a3a3', marginTop: '2px' }} />
-              ) : (
-                <ChevronDown style={{ width: '16px', height: '16px', color: '#a3a3a3', marginTop: '2px' }} />
-              )}
-            </button>
-
-            {isHelpExpanded && (
-              <div style={{ padding: '14px 16px', borderTop: '1px solid #f5f5f5' }}>
-                <p style={{ fontSize: '11px', color: '#a3a3a3', margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Quick solutions</p>
-                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto' }}>
-                  {solutions[selectedSubtype].options.map((option, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => openSolution(option)}
-                      style={{
-                        flexShrink: 0, padding: '10px 14px', background: '#f5f5f5', border: 'none',
-                        borderRadius: '6px', fontSize: '13px', fontWeight: 500, color: '#525252', cursor: 'pointer'
-                      }}
-                    >
-                      {option.title}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Submit Button */}
         <button
@@ -368,6 +400,7 @@ const FeedbackForm = () => {
 
       <style>{`
         @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         * { box-sizing: border-box; margin: 0; padding: 0; }
       `}</style>
     </div>
