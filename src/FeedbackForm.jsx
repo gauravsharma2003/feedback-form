@@ -178,18 +178,18 @@ const FeedbackForm = () => {
         setIsHelpExpanded(true);
         setThinkingTextIndex(0);
         setShowStillFacingIssue(false);
-        
+
         // Change text after 1.5 seconds
         const textTimer = setTimeout(() => {
           setThinkingTextIndex(1);
         }, 1500);
-        
+
         // Show help after 2.5 seconds total
         const helpTimer = setTimeout(() => {
           setIsAnalyzing(false);
           setShowHelp(true);
         }, 2500);
-        
+
         return () => {
           clearTimeout(textTimer);
           clearTimeout(helpTimer);
@@ -227,7 +227,28 @@ const FeedbackForm = () => {
     setShowBottomSheet(true);
   };
 
-  const canSubmit = selectedType && selectedSubtype;
+  const handlePillClick = (typeId) => {
+    if (selectedType === typeId) {
+      // Deselect if clicking the same pill
+      setSelectedType('');
+      setSelectedSubtype('');
+    } else {
+      setSelectedType(typeId);
+      setSelectedSubtype('');
+    }
+  };
+
+  const handleSubPillClick = (subtype) => {
+    if (selectedSubtype === subtype) {
+      // Deselect if clicking the same sub-pill
+      setSelectedSubtype('');
+    } else {
+      setSelectedSubtype(subtype);
+    }
+  };
+
+  // User can always submit - no selection required
+  const canSubmit = true;
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
@@ -270,58 +291,85 @@ const FeedbackForm = () => {
           </div>
         </div>
 
-        {/* Dropdowns Row */}
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
-              Issue type
-            </label>
-            <div style={{ position: 'relative' }}>
-              <select
-                value={selectedType}
-                onChange={(e) => { setSelectedType(e.target.value); setSelectedSubtype(''); }}
+        {/* Pills Section */}
+        <div style={{ marginBottom: '16px' }}>
+          <p style={{
+            fontSize: '14px',
+            fontWeight: 500,
+            color: '#525252',
+            marginBottom: '12px',
+            textAlign: 'left'
+          }}>
+            Is your issue/query related to these?
+          </p>
+
+          {/* Main Pills */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'flex-start' }}>
+            {problemTypes.map(type => (
+              <button
+                key={type.id}
+                onClick={() => handlePillClick(type.id)}
                 style={{
-                  width: '100%', height: '40px', padding: '0 32px 0 10px', fontSize: '13px',
-                  background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '6px',
-                  appearance: 'none', cursor: 'pointer', outline: 'none',
-                  color: selectedType ? '#171717' : '#a3a3a3'
+                  padding: '5px 12px',
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  border: '1px solid',
+                  borderColor: selectedType === type.id ? '#171717' : '#e5e5e5',
+                  borderRadius: '16px',
+                  background: selectedType === type.id ? '#171717' : '#fff',
+                  color: selectedType === type.id ? '#fff' : '#525252',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap'
                 }}
               >
-                <option value="">Select...</option>
-                {problemTypes.map(type => (
-                  <option key={type.id} value={type.id} style={{ color: '#171717' }}>{type.label}</option>
-                ))}
-              </select>
-              <ChevronDown style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: '#a3a3a3', pointerEvents: 'none' }} />
-            </div>
+                {type.label}
+              </button>
+            ))}
           </div>
 
-          <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, color: '#737373', marginBottom: '6px' }}>
-              Specific issue
-            </label>
-            <div style={{ position: 'relative' }}>
-              <select
-                value={selectedSubtype}
-                onChange={(e) => setSelectedSubtype(e.target.value)}
-                disabled={!selectedType}
-                style={{
-                  width: '100%', height: '40px', padding: '0 32px 0 10px', fontSize: '13px',
-                  background: selectedType ? '#fafafa' : '#f5f5f5',
-                  border: '1px solid', borderColor: selectedType ? '#e5e5e5' : '#f5f5f5',
-                  borderRadius: '6px', appearance: 'none',
-                  cursor: selectedType ? 'pointer' : 'not-allowed', outline: 'none',
-                  color: !selectedType ? '#d4d4d4' : selectedSubtype ? '#171717' : '#a3a3a3'
-                }}
-              >
-                <option value="">{selectedType ? 'Select...' : 'Select type first'}</option>
-                {selectedType && subTypes[selectedType].map(subtype => (
-                  <option key={subtype} value={subtype} style={{ color: '#171717' }}>{subtype}</option>
+          {/* Sub Pills - Appear when a main pill is selected */}
+          {selectedType && (
+            <div style={{
+              marginTop: '12px',
+              padding: '0',
+              background: 'transparent',
+              overflow: 'hidden',
+              animation: 'slideDown 0.3s ease-out forwards'
+            }}>
+              <p style={{
+                fontSize: '11px',
+                color: '#737373',
+                marginBottom: '10px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                Select specific issue 
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {subTypes[selectedType].map(subtype => (
+                  <button
+                    key={subtype}
+                    onClick={() => handleSubPillClick(subtype)}
+                    style={{
+                      padding: '4px 10px',
+                      fontSize: '11px',
+                      fontWeight: 400,
+                      border: '1px solid',
+                      borderColor: selectedSubtype === subtype ? '#171717' : '#d4d4d4',
+                      borderRadius: '14px',
+                      background: selectedSubtype === subtype ? '#171717' : '#fff',
+                      color: selectedSubtype === subtype ? '#fff' : '#525252',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    {subtype}
+                  </button>
                 ))}
-              </select>
-              <ChevronDown style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: selectedType ? '#a3a3a3' : '#d4d4d4', pointerEvents: 'none' }} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Thinking Animation - Show when solution exists (stays visible even after CTA click) */}
@@ -345,9 +393,9 @@ const FeedbackForm = () => {
                   <span style={{ width: '5px', height: '5px', background: '#a3a3a3', borderRadius: '50%', animation: 'pulse 1.4s infinite 0.3s' }} />
                 </div>
               )}
-              <span 
-                style={{ 
-                  fontSize: '13px', 
+              <span
+                style={{
+                  fontSize: '13px',
                   color: '#737373',
                   position: 'relative',
                   display: 'inline-block',
@@ -386,7 +434,7 @@ const FeedbackForm = () => {
               position: 'relative'
             }}
           >
-            <div style={{ 
+            <div style={{
               position: 'relative',
               zIndex: 2,
               opacity: 0,
@@ -539,10 +587,10 @@ const FeedbackForm = () => {
                       <div style={{ flex: 1, width: '100%', position: 'relative', zIndex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
                           <h4 style={{ fontSize: '12px', fontWeight: 600, color: '#171717', margin: 0, lineHeight: '1.3' }}>
-                          <Sparkles style={{ width: '12px', height: '12px', color: '#7c6eaa' }} />
-                          Personalize your app 
+                            <Sparkles style={{ width: '12px', height: '12px', color: '#7c6eaa' }} />
+                            Personalize your app
                           </h4>
-                          
+
                         </div>
                         <p style={{ fontSize: '10px', color: '#737373', margin: 0, lineHeight: '1.3' }}>
                           Discover tools that work your way
@@ -604,62 +652,59 @@ const FeedbackForm = () => {
           </button>
         )}
 
-        {/* Feedback Form - Show when no solution OR user clicked "Still facing the issue" */}
-        {(!solutions[selectedSubtype] || showStillFacingIssue) && selectedSubtype && (
-          <>
-            {/* Feedback Text */}
-            <div style={{ marginBottom: '12px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#737373', marginBottom: '4px' }}>
-                Describe the issue
-              </label>
-              <textarea
-                value={feedbackText}
-                onChange={(e) => setFeedbackText(e.target.value)}
-                placeholder="Tell us what happened..."
-                style={{
-                  width: '100%', height: '70px', padding: '10px', fontSize: '13px',
-                  background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '6px',
-                  resize: 'none', outline: 'none', color: '#171717', lineHeight: '1.4'
-                }}
-              />
-            </div>
+        {/* Feedback Form - Always visible */}
+        <>
+          {/* Feedback Text */}
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#737373', marginBottom: '4px' }}>
+              Comments
+            </label>
+            <textarea
+              value={feedbackText}
+              onChange={(e) => setFeedbackText(e.target.value)}
+              placeholder="Tell us more about your issue or suggestion..."
+              style={{
+                width: '100%', height: '80px', padding: '10px', fontSize: '13px',
+                background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: '6px',
+                resize: 'none', outline: 'none', color: '#171717', lineHeight: '1.4'
+              }}
+            />
+          </div>
 
-            {/* Screenshot Upload */}
-            <div style={{ marginBottom: '12px' }}>
-              <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#737373', marginBottom: '4px' }}>
-                Screenshot (optional)
-              </label>
-              <button
-                onClick={handleImageUpload}
-                style={{
-                  width: '100%', height: '56px', border: '1px dashed #d4d4d4', borderRadius: '6px',
-                  background: 'transparent', display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', justifyContent: 'center', gap: '2px', cursor: 'pointer'
-                }}
-              >
-                <Camera style={{ width: '18px', height: '18px', color: '#a3a3a3' }} />
-                <span style={{ fontSize: '11px', color: '#737373' }}>Tap to upload</span>
-              </button>
-            </div>
-          </>
-        )}
+          {/* Screenshot Upload */}
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 500, color: '#737373', marginBottom: '4px' }}>
+              Screenshot (optional)
+            </label>
+            <button
+              onClick={handleImageUpload}
+              style={{
+                width: '100%', height: '56px', border: '1px dashed #d4d4d4', borderRadius: '6px',
+                background: 'transparent', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center', gap: '2px', cursor: 'pointer'
+              }}
+            >
+              <Camera style={{ width: '18px', height: '18px', color: '#a3a3a3' }} />
+              <span style={{ fontSize: '11px', color: '#737373' }}>Tap to upload</span>
+            </button>
+          </div>
+        </>
 
-        {/* Submit Button - Only show when feedback form is visible */}
-        {(!solutions[selectedSubtype] || showStillFacingIssue) && selectedSubtype && (
-          <button
-            disabled={!canSubmit}
-            style={{
-              width: '100%', height: '38px', background: canSubmit ? '#171717' : '#e5e5e5',
-              color: canSubmit ? '#fff' : '#a3a3a3', fontSize: '13px', fontWeight: 500,
-              border: 'none', borderRadius: '19px', cursor: canSubmit ? 'pointer' : 'not-allowed',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-              transition: 'background 0.2s, color 0.2s'
-            }}
-          >
-            <Send style={{ width: '14px', height: '14px' }} />
-            Send Feedback
-          </button>
-        )}
+        {/* Submit Button - Always visible */}
+        <button
+          style={{
+            width: '100%', height: '42px', background: '#171717',
+            color: '#fff', fontSize: '14px', fontWeight: 500,
+            border: 'none', borderRadius: '21px', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+            transition: 'background 0.2s ease'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = '#262626'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = '#171717'; }}
+        >
+          <Send style={{ width: '14px', height: '14px' }} />
+          Send Feedback
+        </button>
       </div>
 
       {/* Bottom Sheet */}
@@ -700,6 +745,18 @@ const FeedbackForm = () => {
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInText { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shimmer { 0% { transform: translateX(0); } 100% { transform: translateX(100%); } }
+        @keyframes slideDown { 
+          from { 
+            opacity: 0; 
+            transform: translateY(-10px); 
+            max-height: 0; 
+          } 
+          to { 
+            opacity: 1; 
+            transform: translateY(0); 
+            max-height: 200px; 
+          } 
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
       `}</style>
     </div>
